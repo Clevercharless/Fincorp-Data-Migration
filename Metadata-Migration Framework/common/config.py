@@ -263,22 +263,19 @@ FAILED_PERMISSION_CREATION_PATH = (
     f"{FAILED_ROOT}/permission_creation_failures"
 )
 
+
 # ==========================================
-# PRINCIPAL MAPPING
+# UC VALIDATION
 # ==========================================
 
-PRINCIPAL_MAPPING_PATH = (
-    f"{MASTER_PATH}/principal_mapping"
+UC_VALIDATION_PATH = (
+    f"{VALIDATION_ROOT}/uc_validation"
 )
 
-PRINCIPAL_MAPPING_STATUS_PATH = (
-    f"{STATUS_ROOT}/principal_mapping_status"
+UC_VALIDATION_STATUS_PATH = (
+    f"{STATUS_ROOT}/uc_validation_status"
 )
 
-PRINCIPAL_MAPPING_CHECKPOINT_PATH = (
-    f"{CHECKPOINT_ROOT}/principal_mapping_checkpoint"
-)
-
-FAILED_PRINCIPAL_MAPPING_PATH = (
-    f"{FAILED_ROOT}/principal_mapping_failures"
+FAILED_UC_VALIDATION_PATH = (
+    f"{FAILED_ROOT}/uc_validation_failures"
 )
