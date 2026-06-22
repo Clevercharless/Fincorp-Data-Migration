@@ -16,6 +16,10 @@ REPORT_ROOT = f"{ROOT_PATH}/reports"
 
 CHECKPOINT_ROOT = f"{ROOT_PATH}/checkpoints"
 
+METRICS_ROOT = (
+    f"{ROOT_PATH}/metrics"
+)
+
 # ==========================================
 # METADATA PATHS
 # ==========================================
@@ -69,6 +73,26 @@ PARTITION_STATUS_PATH = f"{STATUS_ROOT}/partition_status"
 STORAGE_STATUS_PATH = f"{STATUS_ROOT}/storage_status"
 
 MASTER_STATUS_PATH = f"{STATUS_ROOT}/master_status"
+
+METADATA_METRICS_PATH = (
+    f"{METRICS_ROOT}/metadata"
+)
+
+UC_METRICS_PATH = (
+    f"{METRICS_ROOT}/uc_creation"
+)
+
+VALIDATION_METRICS_PATH = (
+    f"{METRICS_ROOT}/validation"
+)
+
+MIGRATION_METRICS_PATH = (
+    f"{METRICS_ROOT}/migration"
+)
+
+RECONCILIATION_METRICS_PATH = (
+    f"{METRICS_ROOT}/reconciliation"
+)
 
 # ==========================================
 # STORAGE MAPPING
