@@ -230,3 +230,19 @@ FAILED_CATALOG_CREATION_PATH = (
 FAILED_SCHEMA_CREATION_PATH = (
     f"{FAILED_ROOT}/schema_creation_failures"
 )
+
+# ==========================================
+# UC TABLE CREATION
+# ==========================================
+
+TABLE_CREATION_STATUS_PATH = (
+    f"{STATUS_ROOT}/table_creation_status"
+)
+
+TABLE_CREATION_CHECKPOINT_PATH = (
+    f"{CHECKPOINT_ROOT}/table_creation_checkpoint"
+)
+
+FAILED_TABLE_CREATION_PATH = (
+    f"{FAILED_ROOT}/table_creation_failures"
+)
