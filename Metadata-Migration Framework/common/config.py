@@ -107,6 +107,22 @@ AUDIT_PATH = (
 )
 
 # ==========================================
+# LINEAGE
+# ==========================================
+
+LINEAGE_PATH = (
+    f"{METADATA_ROOT}/lineage"
+)
+
+FAILED_LINEAGE_PATH = (
+    f"{FAILED_ROOT}/failed_lineage"
+)
+
+LINEAGE_STATUS_PATH = (
+    f"{STATUS_ROOT}/lineage_status"
+)
+
+# ==========================================
 # STORAGE MAPPING
 # ==========================================
 
