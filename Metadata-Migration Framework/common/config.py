@@ -246,3 +246,19 @@ TABLE_CREATION_CHECKPOINT_PATH = (
 FAILED_TABLE_CREATION_PATH = (
     f"{FAILED_ROOT}/table_creation_failures"
 )
+
+# ==========================================
+# PERMISSION CREATION
+# ==========================================
+
+PERMISSION_CREATION_STATUS_PATH = (
+    f"{STATUS_ROOT}/permission_creation_status"
+)
+
+PERMISSION_CREATION_CHECKPOINT_PATH = (
+    f"{CHECKPOINT_ROOT}/permission_creation_checkpoint"
+)
+
+FAILED_PERMISSION_CREATION_PATH = (
+    f"{FAILED_ROOT}/permission_creation_failures"
+)
