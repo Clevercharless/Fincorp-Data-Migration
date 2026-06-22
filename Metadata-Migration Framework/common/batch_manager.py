@@ -1,81 +1,97 @@
+# ==========================================
+# Common/batch_manager.py
+# ==========================================
+
+from pyspark.sql.functions import (
+    row_number,
+    monotonically_increasing_id,
+    col
+)
+
+from pyspark.sql.window import Window
+
 import math
+
 
 class BatchManager:
 
     @staticmethod
-    def get_batches(
+    def get_dataframe_batches(
         df,
-        batch_size=500
+        batch_size
     ):
+        """
+        Memory-safe DataFrame batching.
 
-        rows = df.collect()
+        Returns DataFrame batches instead of
+        collecting all rows to driver.
+        """
 
-        for i in range(
+        window_spec = Window.orderBy(
+            monotonically_increasing_id()
+        )
 
-            0,
+        numbered_df = (
 
-            len(rows),
+            df.withColumn(
+                "__row_num",
+                row_number().over(
+                    window_spec
+                )
+            )
 
-            batch_size
+        )
 
-        ):
+        total_rows = numbered_df.count()
 
-            yield rows[
-                i:i+batch_size
-            ]
+        batch_count = math.ceil(
+            total_rows / batch_size
+        )
 
-    @staticmethod
-    def get_list_batches(
-        input_list,
-        batch_size=500
-    ):
+        for batch_no in range(batch_count):
 
-        for i in range(
+            start_row = (
+                batch_no * batch_size
+            ) + 1
 
-            0,
+            end_row = (
+                start_row + batch_size - 1
+            )
 
-            len(input_list),
+            yield (
 
-            batch_size
+                numbered_df
 
-        ):
+                .filter(
 
-            yield input_list[
-                i:i+batch_size
-            ]
+                    (col("__row_num") >= start_row)
+                    &
+                    (col("__row_num") <= end_row)
+
+                )
+
+                .drop("__row_num")
+
+            )
 
     @staticmethod
     def get_batch_count(
-
         total_records,
-
         batch_size
-
     ):
 
         return math.ceil(
-
-            total_records /
-
-            batch_size
-
+            total_records / batch_size
         )
 
     @staticmethod
     def print_progress(
-
         batch_number,
-
         total_batches
-
     ):
 
         print(
-
             f"Processing Batch "
-
             f"{batch_number}"
-
             f"/{total_batches}"
-
         )
