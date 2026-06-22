@@ -279,3 +279,19 @@ UC_VALIDATION_STATUS_PATH = (
 FAILED_UC_VALIDATION_PATH = (
     f"{FAILED_ROOT}/uc_validation_failures"
 )
+
+# ==========================================
+# VALIDATION OUTPUTS
+# ==========================================
+
+VALIDATION_RESULTS_PATH = (
+    f"{VALIDATION_ROOT}/validation_results"
+)
+
+FAILED_VALIDATION_PATH = (
+    f"{VALIDATION_ROOT}/validation_failures"
+)
+
+VALIDATION_METRICS_PATH = (
+    f"{VALIDATION_ROOT}/validation_metrics"
+)
