@@ -4,7 +4,7 @@
 
 from pyspark.sql import Row
 from pyspark.sql.functions import *
-from datetime import datetime
+from pyspark.sql.window import Window
 
 # ==========================================
 # Common Imports
@@ -15,7 +15,6 @@ from datetime import datetime
 %run ../Common/logger
 %run ../Common/storage_manager
 %run ../Common/retry_manager
-%run ../Common/checkpoint_manager
 %run ../Common/status_manager
 %run ../Common/framework_metrics
 %run ../Common/audit_manager
@@ -39,97 +38,97 @@ class MetadataBuilder:
             self.storage
         )
 
-    # =====================================
+    # ======================================
     # Build Master Metadata
-    # =====================================
+    # ======================================
 
     def build_master_metadata(self):
 
-        self.logger.info(
-            "Building Master Metadata"
-        )
+    self.logger.info(
+        "Building Master Metadata"
+    )
 
-        tables_df = self.storage.load_delta(
-            TABLE_PATH
-        )
+    manifest_df = self.storage.load_delta(
+        MIGRATION_BATCH_PATH
+    )
 
-        columns_df = self.storage.load_delta(
-            COLUMN_PATH
-        )
+    master_df = (
 
-        permissions_df = self.storage.load_delta(
-            PERMISSION_PATH
-        )
+        manifest_df
 
-        partitions_df = self.storage.load_delta(
-            PARTITION_PATH
-        )
+        .select(
 
-        storage_df = self.storage.load_delta(
-            STORAGE_LOCATION_PATH
-        )
+            "manifest_id",
 
-        lineage_df = self.storage.load_delta(
-            LINEAGE_PATH
-        )
+            "catalog",
 
-        master_df = (
+            "schema",
 
-            tables_df
+            "table",
 
-            .join(
+            "table_type",
 
-                storage_df,
+            "format",
 
-                ["catalog",
-                 "schema",
-                 "table"],
+            "source_path",
 
-                "left"
+            "target_path",
 
-            )
+            "creation_batch",
+
+            "uc_creation_status",
+
+            "migration_status",
+
+            "datasync_status",
+
+            "validation_status",
+
+            "reconciliation_status"
 
         )
 
-        self.storage.save_delta(
+    )
 
-            master_df,
+    self.storage.save_delta(
 
-            f"{MASTER_PATH}/master_metadata"
+        master_df,
 
-        )
+        MASTER_METADATA_PATH
 
-        self.status.write_status(
+    )
 
-            "MASTER_METADATA",
+    self.status.write_status(
 
-            "BUILD_MASTER_METADATA",
+        "MASTER_METADATA",
 
-            SUCCESS,
+        "MASTER_METADATA_BUILD",
 
-            MASTER_STATUS_PATH
+        SUCCESS,
 
-        )
+        MASTER_STATUS_PATH
 
-        self.audit.write_audit(
+    )
 
-            METADATA,
+    self.audit.write_audit(
 
-            "MASTER_METADATA_BUILD",
+        METADATA,
 
-            "MASTER_METADATA",
+        "MASTER_METADATA_BUILD",
 
-            SUCCESS
+        "MASTER_METADATA",
 
-        )
+        SUCCESS
 
-        self.logger.info(
-            "Master Metadata Built"
-        )
+    )
 
-    # =====================================
+    self.logger.info(
+        "Master Metadata Built"
+    )
+
+    # ======================================
     # Metadata Summary
-    # =====================================
+    # ======================================
 
     def build_metadata_summary(self):
 
@@ -141,48 +140,42 @@ class MetadataBuilder:
 
             Row(
                 metric="catalog_count",
-                value=
-                self.storage
+                value=self.storage
                 .load_delta(CATALOG_PATH)
                 .count()
             ),
 
             Row(
                 metric="schema_count",
-                value=
-                self.storage
+                value=self.storage
                 .load_delta(SCHEMA_PATH)
                 .count()
             ),
 
             Row(
                 metric="table_count",
-                value=
-                self.storage
+                value=self.storage
                 .load_delta(TABLE_PATH)
                 .count()
             ),
 
             Row(
                 metric="column_count",
-                value=
-                self.storage
+                value=self.storage
                 .load_delta(COLUMN_PATH)
                 .count()
             ),
 
             Row(
                 metric="permission_count",
-                value=
-                self.storage
+                value=self.storage
                 .load_delta(PERMISSION_PATH)
                 .count()
             ),
 
             Row(
                 metric="partition_count",
-                value=
-                self.storage
+                value=self.storage
                 .load_delta(PARTITION_PATH)
                 .count()
             )
@@ -197,7 +190,7 @@ class MetadataBuilder:
 
             summary_df,
 
-            f"{MASTER_PATH}/metadata_summary"
+            METADATA_SUMMARY_PATH
 
         )
 
@@ -205,9 +198,9 @@ class MetadataBuilder:
             "Metadata Summary Created"
         )
 
-    # =====================================
+    # ======================================
     # Migration Manifest
-    # =====================================
+    # ======================================
 
     def build_migration_manifest(self):
 
@@ -230,6 +223,10 @@ class MetadataBuilder:
         partition_df = (
 
             partitions_df
+
+            .orderBy(
+                "partition_order"
+            )
 
             .groupBy(
                 "catalog",
@@ -279,7 +276,41 @@ class MetadataBuilder:
 
             .withColumn(
 
+                "manifest_id",
+
+                concat_ws(
+
+                    ".",
+
+                    col("catalog"),
+
+                    col("schema"),
+
+                    col("table")
+
+                )
+
+            )
+
+            .withColumn(
+
+                "uc_creation_status",
+
+                lit("PENDING")
+
+            )
+
+            .withColumn(
+
                 "migration_status",
+
+                lit("PENDING")
+
+            )
+
+            .withColumn(
+
+                "datasync_status",
 
                 lit("PENDING")
 
@@ -315,17 +346,17 @@ class MetadataBuilder:
 
             manifest_df,
 
-            f"{MASTER_PATH}/migration_manifest"
+            MIGRATION_MANIFEST_PATH
 
         )
 
         self.logger.info(
-            "Migration Manifest Created"
+            "Migration Manifest Built"
         )
 
-    # =====================================
+    # ======================================
     # Migration Batches
-    # =====================================
+    # ======================================
 
     def build_migration_batches(self):
 
@@ -334,12 +365,16 @@ class MetadataBuilder:
         )
 
         manifest_df = self.storage.load_delta(
-
-            f"{MASTER_PATH}/migration_manifest"
-
+            MIGRATION_MANIFEST_PATH
         )
 
-        manifest_df = (
+        window_spec = Window.orderBy(
+            "catalog",
+            "schema",
+            "table"
+        )
+
+        batch_df = (
 
             manifest_df
 
@@ -348,20 +383,14 @@ class MetadataBuilder:
                 "row_num",
 
                 row_number().over(
-
-                    Window.orderBy(
-                        "catalog",
-                        "schema",
-                        "table"
-                    )
-
+                    window_spec
                 )
 
             )
 
             .withColumn(
 
-                "migration_batch",
+                "creation_batch",
 
                 ceil(
 
@@ -377,67 +406,124 @@ class MetadataBuilder:
 
             )
 
+            .drop("row_num")
+
         )
 
         self.storage.save_delta(
 
-            manifest_df,
+            batch_df,
 
-            f"{MASTER_PATH}/migration_batches"
+            MIGRATION_BATCH_PATH
 
         )
 
         self.logger.info(
-            "Migration Batches Created"
+            "Migration Batches Built"
         )
 
-    # =====================================
-    # Metadata Validation
-    # =====================================
+    # ======================================
+    # Manifest Validation
+    # ======================================
 
-    def validate_master_metadata(self):
+    def validate_manifest(self):
 
         self.logger.info(
-            "Validating Metadata"
+            "Validating Manifest"
         )
 
-        tables = self.storage.load_delta(
-            TABLE_PATH
-        ).count()
+        manifest = self.storage.load_delta(
+            MIGRATION_BATCH_PATH
+        )
 
-        columns = self.storage.load_delta(
-            COLUMN_PATH
-        ).count()
+        duplicate_count = (
 
-        locations = self.storage.load_delta(
-            STORAGE_LOCATION_PATH
-        ).count()
+            manifest
 
-        if tables == 0:
-
-            raise Exception(
-                "No Tables Extracted"
+            .groupBy(
+                "catalog",
+                "schema",
+                "table"
             )
 
-        if columns == 0:
+            .count()
 
-            raise Exception(
-                "No Columns Extracted"
+            .filter(
+                col("count") > 1
             )
 
-        if locations == 0:
+            .count()
+
+        )
+
+        if duplicate_count > 0:
 
             raise Exception(
-                "No Storage Locations"
+
+                f"{duplicate_count} "
+                f"Duplicate Tables Found"
+
+            )
+
+        missing_target_paths = (
+
+            manifest
+
+            .filter(
+
+                col(
+                    "target_path"
+                ).isNull()
+
+            )
+
+            .count()
+
+        )
+
+        if missing_target_paths > 0:
+
+            raise Exception(
+
+                f"{missing_target_paths} "
+
+                f"Tables Missing Target Path"
+
+            )
+
+        missing_format = (
+
+            manifest
+
+            .filter(
+
+                col(
+                    "format"
+                ).isNull()
+
+            )
+
+            .count()
+
+        )
+
+        if missing_format > 0:
+
+            raise Exception(
+
+                f"{missing_format} "
+
+                f"Tables Missing Format"
+
             )
 
         self.logger.info(
-            "Metadata Validation Passed"
+            "Manifest Validation Passed"
         )
 
-    # =====================================
-    # Execute
-    # =====================================
+    # ======================================
+    # Run
+    # ======================================
 
     def run(self):
 
@@ -449,7 +535,7 @@ class MetadataBuilder:
 
         self.build_migration_batches()
 
-        self.validate_master_metadata()
+        self.validate_manifest()
 
         self.metrics.save_metrics(
 
@@ -467,8 +553,12 @@ class MetadataBuilder:
 
             "METADATA_BUILDER",
 
-            "MASTER_METADATA",
+            "MIGRATION_MANIFEST",
 
             SUCCESS
 
+        )
+
+        self.logger.info(
+            "Metadata Builder Completed"
         )
