@@ -262,3 +262,23 @@ PERMISSION_CREATION_CHECKPOINT_PATH = (
 FAILED_PERMISSION_CREATION_PATH = (
     f"{FAILED_ROOT}/permission_creation_failures"
 )
+
+# ==========================================
+# PRINCIPAL MAPPING
+# ==========================================
+
+PRINCIPAL_MAPPING_PATH = (
+    f"{MASTER_PATH}/principal_mapping"
+)
+
+PRINCIPAL_MAPPING_STATUS_PATH = (
+    f"{STATUS_ROOT}/principal_mapping_status"
+)
+
+PRINCIPAL_MAPPING_CHECKPOINT_PATH = (
+    f"{CHECKPOINT_ROOT}/principal_mapping_checkpoint"
+)
+
+FAILED_PRINCIPAL_MAPPING_PATH = (
+    f"{FAILED_ROOT}/principal_mapping_failures"
+)
