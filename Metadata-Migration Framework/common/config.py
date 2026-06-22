@@ -135,6 +135,32 @@ TARGET_STORAGE_PREFIX = (
 )
 
 # ==========================================
+# MASTER METADATA
+# ==========================================
+
+MASTER_METADATA_PATH = (
+    f"{MASTER_PATH}/master_metadata"
+)
+
+METADATA_SUMMARY_PATH = (
+    f"{MASTER_PATH}/metadata_summary"
+)
+
+MIGRATION_MANIFEST_PATH = (
+    f"{MASTER_PATH}/migration_manifest"
+)
+
+MIGRATION_BATCH_PATH = (
+    f"{MASTER_PATH}/migration_batches"
+)
+
+# ==========================================
+# MIGRATION SETTINGS
+# ==========================================
+
+MIGRATION_BATCH_SIZE = 100
+
+# ==========================================
 # FRAMEWORK SETTINGS
 # ==========================================
 
