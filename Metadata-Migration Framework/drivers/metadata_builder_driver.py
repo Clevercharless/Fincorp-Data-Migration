@@ -13,8 +13,6 @@
 # ------------------------------------------
 
 %run ../Common/logger
-%run ../Common/constants
-
 
 logger = Logger()
 
@@ -24,65 +22,24 @@ logger.info(
 
 try:
 
+    # --------------------------------------
+    # Initialize Builder
+    # --------------------------------------
+
     builder = MetadataBuilder()
 
     # --------------------------------------
-    # Step 1
-    # Build Master Metadata
+    # Execute Full Builder Workflow
     # --------------------------------------
 
     logger.info(
-        "Building Master Metadata"
+        "Executing Metadata Builder Workflow"
     )
 
-    builder.build_master_metadata()
-
-    # --------------------------------------
-    # Step 2
-    # Build Metadata Summary
-    # --------------------------------------
+    builder.run()
 
     logger.info(
-        "Building Metadata Summary"
-    )
-
-    builder.build_metadata_summary()
-
-    # --------------------------------------
-    # Step 3
-    # Build Migration Manifest
-    # --------------------------------------
-
-    logger.info(
-        "Building Migration Manifest"
-    )
-
-    builder.build_migration_manifest()
-
-    # --------------------------------------
-    # Step 4
-    # Build Migration Batches
-    # --------------------------------------
-
-    logger.info(
-        "Building Migration Batches"
-    )
-
-    builder.build_migration_batches()
-
-    # --------------------------------------
-    # Step 5
-    # Validate Metadata
-    # --------------------------------------
-
-    logger.info(
-        "Validating Metadata"
-    )
-
-    builder.validate_master_metadata()
-
-    logger.info(
-        "Metadata Builder Driver Completed"
+        "Metadata Builder Driver Completed Successfully"
     )
 
 except Exception as e:
