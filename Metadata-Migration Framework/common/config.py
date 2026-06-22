@@ -295,3 +295,11 @@ FAILED_VALIDATION_PATH = (
 VALIDATION_METRICS_PATH = (
     f"{VALIDATION_ROOT}/validation_metrics"
 )
+
+METADATA_VALIDATION_REPORT_PATH = (
+    f"{VALIDATION_ROOT}/metadata_validation_report"
+)
+
+METADATA_RECONCILIATION_PATH = (
+    f"{VALIDATION_ROOT}/metadata_reconciliation"
+)
