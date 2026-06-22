@@ -7,3 +7,25 @@ RUNNING = "RUNNING"
 PENDING = "PENDING"
 
 COMPLETED = "COMPLETED"
+
+# ==========================================
+# MIGRATION PHASES
+# ==========================================
+
+METADATA = "METADATA"
+
+UC_CREATION = "UC_CREATION"
+
+METADATA_VALIDATION = (
+    "METADATA_VALIDATION"
+)
+
+DATASYNC = "DATASYNC"
+
+DATA_VALIDATION = (
+    "DATA_VALIDATION"
+)
+
+RECONCILIATION = (
+    "RECONCILIATION"
+)
