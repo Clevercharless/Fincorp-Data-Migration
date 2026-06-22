@@ -193,3 +193,40 @@ STORAGE_CREDENTIAL_CHECKPOINT_PATH = (
 EXTERNAL_LOCATION_CHECKPOINT_PATH = (
     f"{CHECKPOINT_ROOT}/external_location_checkpoint"
 )
+
+
+# ==========================================
+# UC CREATION STATUS
+# ==========================================
+
+CATALOG_CREATION_STATUS_PATH = (
+    f"{STATUS_ROOT}/catalog_creation_status"
+)
+
+SCHEMA_CREATION_STATUS_PATH = (
+    f"{STATUS_ROOT}/schema_creation_status"
+)
+
+# ==========================================
+# UC CREATION CHECKPOINTS
+# ==========================================
+
+CATALOG_CREATION_CHECKPOINT_PATH = (
+    f"{CHECKPOINT_ROOT}/catalog_creation_checkpoint"
+)
+
+SCHEMA_CREATION_CHECKPOINT_PATH = (
+    f"{CHECKPOINT_ROOT}/schema_creation_checkpoint"
+)
+
+# ==========================================
+# UC CREATION FAILURES
+# ==========================================
+
+FAILED_CATALOG_CREATION_PATH = (
+    f"{FAILED_ROOT}/catalog_creation_failures"
+)
+
+FAILED_SCHEMA_CREATION_PATH = (
+    f"{FAILED_ROOT}/schema_creation_failures"
+)
