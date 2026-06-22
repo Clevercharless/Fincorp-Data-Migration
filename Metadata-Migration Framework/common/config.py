@@ -95,6 +95,18 @@ RECONCILIATION_METRICS_PATH = (
 )
 
 # ==========================================
+# AUDIT
+# ==========================================
+
+AUDIT_ROOT = (
+    f"{ROOT_PATH}/audit"
+)
+
+AUDIT_PATH = (
+    f"{AUDIT_ROOT}/migration_audit"
+)
+
+# ==========================================
 # STORAGE MAPPING
 # ==========================================
 
