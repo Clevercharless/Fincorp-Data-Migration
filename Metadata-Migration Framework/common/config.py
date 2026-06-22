@@ -169,3 +169,27 @@ BATCH_SIZE = 500
 MAX_RETRIES = 3
 
 RETRY_WAIT_SECONDS = 5
+
+# ==========================================
+# UC CREATION STATUS
+# ==========================================
+
+STORAGE_CREDENTIAL_STATUS_PATH = (
+    f"{STATUS_ROOT}/storage_credential_status"
+)
+
+EXTERNAL_LOCATION_STATUS_PATH = (
+    f"{STATUS_ROOT}/external_location_status"
+)
+
+# ==========================================
+# UC CREATION CHECKPOINTS
+# ==========================================
+
+STORAGE_CREDENTIAL_CHECKPOINT_PATH = (
+    f"{CHECKPOINT_ROOT}/storage_credential_checkpoint"
+)
+
+EXTERNAL_LOCATION_CHECKPOINT_PATH = (
+    f"{CHECKPOINT_ROOT}/external_location_checkpoint"
+)
