@@ -28,13 +28,13 @@ class FileSizeValidator(
             ):
 
                 source_size = (
-                    self.get_source_size(
+                    self.get_path_size(
                         table.source_path
                     )
                 )
 
                 target_size = (
-                    self.get_target_size(
+                    self.get_path_size(
                         table.target_path
                     )
                 )
