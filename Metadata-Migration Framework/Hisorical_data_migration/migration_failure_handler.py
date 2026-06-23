@@ -30,7 +30,10 @@ class MigrationFailureHandler:
 
         error,
 
-        retry_count
+        retry_count,
+        manifest_ids,
+        table_count,
+        batch_size_gb
 
     ):
 
@@ -41,20 +44,15 @@ class MigrationFailureHandler:
                 [
 
                     Row(
-
                         layer=layer,
-
                         batch_id=batch_id,
-
                         task_name=task_name,
-
+                        manifest_ids=",".join(manifest_ids),
+                        table_count=table_count,
+                        batch_size_gb=batch_size_gb,
                         error_message=str(error),
-
                         retry_count=retry_count,
-
-                        failure_time=
-                            datetime.now()
-
+                        failure_time=datetime.now()
                     )
 
                 ]
