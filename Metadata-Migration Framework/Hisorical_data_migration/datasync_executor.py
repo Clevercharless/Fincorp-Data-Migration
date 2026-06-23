@@ -119,3 +119,164 @@ class DataSyncExecutor:
         self.logger.info(
             "DataSync Execution Submitted"
         )
+
+
+# ==========================================
+# Execute Single Batch
+# ==========================================
+
+def execute_batch(
+
+    self,
+
+    layer,
+
+    batch_id
+
+):
+
+    self.logger.info(
+
+        f"Executing Batch : "
+        f"{layer}-{batch_id}"
+
+    )
+
+    try:
+
+        batch_tables = (
+
+            self.storage.load_delta(
+                HISTORICAL_BATCH_PATH
+            )
+
+            .filter(
+                col("layer")
+                == layer
+            )
+
+            .filter(
+                col("historical_batch")
+                == batch_id
+            )
+
+        )
+
+        task_info = (
+
+            self.storage.load_delta(
+                DATASYNC_TASK_PATH
+            )
+
+            .filter(
+                col("layer")
+                == layer
+            )
+
+            .filter(
+                col("historical_batch")
+                == batch_id
+            )
+
+            .first()
+
+        )
+
+        if task_info is None:
+
+            raise Exception(
+
+                f"Task Not Found : "
+                f"{layer}-{batch_id}"
+
+            )
+
+        table_count = (
+            batch_tables.count()
+        )
+
+        batch_size_gb = (
+
+            batch_tables
+
+            .agg(
+                sum(
+                    "estimated_size_gb"
+                )
+            )
+
+            .first()[0]
+
+        )
+
+        manifest_ids = [
+
+            row.manifest_id
+
+            for row in
+
+            batch_tables.select(
+                "manifest_id"
+            ).collect()
+
+        ]
+
+        # ----------------------------------
+        # Actual boto3 call comes here
+        # ----------------------------------
+
+        execution_status = "RUNNING"
+
+        execution_df = spark.createDataFrame(
+
+            [
+
+                Row(
+
+                    layer=layer,
+
+                    historical_batch=
+                        batch_id,
+
+                    task_name=
+                        task_info.task_name,
+
+                    execution_status=
+                        execution_status,
+
+                    table_count=
+                        table_count,
+
+                    batch_size_gb=
+                        batch_size_gb,
+
+                    start_time=
+                        datetime.now()
+
+                )
+
+            ]
+
+        )
+
+        self.storage.save_delta(
+
+            execution_df,
+
+            DATASYNC_EXECUTION_PATH,
+
+            mode="append"
+
+        )
+
+        self.logger.info(
+
+            f"Batch Submitted : "
+
+            f"{layer}-{batch_id}"
+
+        )
+
+    except Exception as e:
+
+        raise
