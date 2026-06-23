@@ -4,6 +4,7 @@
 
 %run ./base_data_validator
 
+
 class RowCountValidator(
     BaseDataValidator
 ):
@@ -26,27 +27,29 @@ class RowCountValidator(
 
                 try:
 
-                    source_table = (
-                        f"{table.catalog}."
-                        f"{table.schema}."
-                        f"{table.table}"
+                    source_df = self.read_source_data(
+
+                        table.source_path,
+
+                        table.format
+
                     )
 
-                    target_table = source_table
+                    target_df = self.read_target_data(
 
-                    source_count = spark.sql(
-                        f"""
-                        SELECT COUNT(*)
-                        FROM {source_table}
-                        """
-                    ).first()[0]
+                        table.target_path,
 
-                    target_count = spark.sql(
-                        f"""
-                        SELECT COUNT(*)
-                        FROM {target_table}
-                        """
-                    ).first()[0]
+                        table.format
+
+                    )
+
+                    source_count = (
+                        source_df.count()
+                    )
+
+                    target_count = (
+                        target_df.count()
+                    )
 
                     self.add_result(
 
