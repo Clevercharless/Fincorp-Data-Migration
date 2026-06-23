@@ -392,3 +392,28 @@ DATA_RECONCILIATION_PATH = (
 DATA_RECONCILIATION_REPORT_PATH = (
     f"{RECONCILIATION_ROOT}/data_reconciliation_report"
 )
+
+
+# ==========================================
+# CDC
+# ==========================================
+
+CDC_MANIFEST_PATH = (
+    f"{MIGRATION_ROOT}/cdc_manifest"
+)
+
+CDC_BATCH_PATH = (
+    f"{MIGRATION_ROOT}/cdc_batches"
+)
+
+CDC_WATERMARK_PATH = (
+    f"{CHECKPOINT_ROOT}/cdc_watermarks"
+)
+
+CDC_REPORT_PATH = (
+    f"{REPORT_ROOT}/cdc_report"
+)
+
+CDC_RECONCILIATION_PATH = (
+    f"{RECONCILIATION_ROOT}/cdc_reconciliation"
+)
