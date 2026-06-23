@@ -27,17 +27,33 @@ class FileCountValidator(
                 manifest.toLocalIterator()
             ):
 
-                source_count = (
-                    self.get_source_file_count(
-                        table.source_path
-                    )
-                )
+                source_df = self.read_source_data(
 
-                target_count = (
-                    self.get_target_file_count(
-                        table.target_path
-                    )
-                )
+    table.source_path,
+
+    table.format
+
+)
+
+target_df = self.read_target_data(
+
+    table.target_path,
+
+    table.format
+
+)
+
+source_count = len(
+
+    source_df.inputFiles()
+
+)
+
+target_count = len(
+
+    target_df.inputFiles()
+
+)
 
                 self.add_result(
 
