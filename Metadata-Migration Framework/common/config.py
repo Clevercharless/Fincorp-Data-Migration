@@ -364,3 +364,23 @@ FAILED_BATCH_PATH = (
 FAILED_EXECUTION_PATH = (
     f"{FAILED_ROOT}/failed_executions"
 )
+
+# ==========================================
+# DATA VALIDATION
+# ==========================================
+
+HISTORICAL_VALIDATION_RESULTS_PATH = (
+    f"{VALIDATION_ROOT}/historical_validation_results"
+)
+
+HISTORICAL_VALIDATION_FAILURE_PATH = (
+    f"{VALIDATION_ROOT}/historical_validation_failures"
+)
+
+HISTORICAL_VALIDATION_METRICS_PATH = (
+    f"{VALIDATION_ROOT}/historical_validation_metrics"
+)
+
+HISTORICAL_RECONCILIATION_PATH = (
+    f"{RECONCILIATION_ROOT}/historical_reconciliation"
+)
