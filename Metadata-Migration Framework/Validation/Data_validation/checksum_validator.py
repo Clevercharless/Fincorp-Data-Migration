@@ -21,13 +21,9 @@ class ChecksumValidator(
 
         self,
 
-        table_name
+        df
 
     ):
-
-        df = spark.table(
-            table_name
-        )
 
         checksum = (
 
@@ -83,22 +79,26 @@ class ChecksumValidator(
 
                 try:
 
-                    source_table = (
+                    source_df = self.read_source_data(
 
-                        f"{table.catalog}."
+                        table.source_path,
 
-                        f"{table.schema}."
-
-                        f"{table.table}"
+                        table.format
 
                     )
 
-                    target_table = source_table
+                    target_df = self.read_target_data(
+
+                        table.target_path,
+
+                        table.format
+
+                    )
 
                     source_hash = (
 
                         self.generate_checksum(
-                            source_table
+                            source_df
                         )
 
                     )
@@ -106,7 +106,7 @@ class ChecksumValidator(
                     target_hash = (
 
                         self.generate_checksum(
-                            target_table
+                            target_df
                         )
 
                     )
