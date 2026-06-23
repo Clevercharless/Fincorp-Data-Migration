@@ -333,3 +333,25 @@ MIGRATION_REPORT_PATH = (
 MIGRATION_RECONCILIATION_PATH = (
     f"{RECONCILIATION_ROOT}/migration_reconciliation"
 )
+
+# ==========================================
+# DATASYNC
+# ==========================================
+
+DATASYNC_TASK_PATH = (
+    f"{MIGRATION_ROOT}/datasync_tasks"
+)
+
+DATASYNC_EXECUTION_PATH = (
+    f"{MIGRATION_ROOT}/datasync_executions"
+)
+
+DATASYNC_STATUS_PATH = (
+    f"{STATUS_ROOT}/datasync_status"
+)
+
+FAILED_DATASYNC_PATH = (
+    f"{FAILED_ROOT}/datasync_failures"
+)
+
+MAX_RETRY_COUNT = 3
