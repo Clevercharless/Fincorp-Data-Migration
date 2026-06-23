@@ -303,3 +303,33 @@ METADATA_VALIDATION_REPORT_PATH = (
 METADATA_RECONCILIATION_PATH = (
     f"{VALIDATION_ROOT}/metadata_reconciliation"
 )
+
+# ==========================================
+# HISTORICAL MIGRATION
+# ==========================================
+
+HISTORICAL_BATCH_PATH = (
+    f"{MIGRATION_ROOT}/historical_batches"
+)
+
+HISTORICAL_BATCH_SIZE_GB = 500
+
+HISTORICAL_MIGRATION_STATUS_PATH = (
+    f"{STATUS_ROOT}/historical_migration_status"
+)
+
+HISTORICAL_CHECKPOINT_PATH = (
+    f"{CHECKPOINT_ROOT}/historical_checkpoint"
+)
+
+FAILED_MIGRATION_PATH = (
+    f"{FAILED_ROOT}/historical_migration_failures"
+)
+
+MIGRATION_REPORT_PATH = (
+    f"{REPORT_ROOT}/historical_migration_report"
+)
+
+MIGRATION_RECONCILIATION_PATH = (
+    f"{RECONCILIATION_ROOT}/migration_reconciliation"
+)
