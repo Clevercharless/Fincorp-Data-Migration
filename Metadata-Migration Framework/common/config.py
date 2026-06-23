@@ -355,3 +355,12 @@ FAILED_DATASYNC_PATH = (
 )
 
 MAX_RETRY_COUNT = 3
+
+
+FAILED_BATCH_PATH = (
+    f"{FAILED_ROOT}/failed_batches"
+)
+
+FAILED_EXECUTION_PATH = (
+    f"{FAILED_ROOT}/failed_executions"
+)
