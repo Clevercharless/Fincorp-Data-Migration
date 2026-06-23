@@ -41,6 +41,63 @@ class BaseDataValidator:
 
         self.failed_results = []
 
+
+
+    # ======================================
+# Read Source Data
+# ======================================
+
+def read_source_data(
+
+    self,
+
+    source_path,
+
+    file_format
+
+):
+
+    return (
+
+        spark.read
+
+        .format(
+            file_format.lower()
+        )
+
+        .load(
+            source_path
+        )
+
+    )
+
+# ======================================
+# Read Target Data
+# ======================================
+
+def read_target_data(
+
+    self,
+
+    target_path,
+
+    file_format
+
+):
+
+    return (
+
+        spark.read
+
+        .format(
+            file_format.lower()
+        )
+
+        .load(
+            target_path
+        )
+
+    )
     # ======================================
     # Validation Result
     # ======================================
